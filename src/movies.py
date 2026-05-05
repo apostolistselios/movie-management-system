@@ -146,6 +146,56 @@ class MovieRepository:
             self._TRENDING_SCORE_MOVIES_KEY, 1, self._get_normalized_title(title)
         )
 
+    def get_top_trending(self, limit: int = 3) -> list[dict]:
+        """Gets the top trending movies ordered by their trending score.
+
+        Args:
+            limit (int): the maximum number of movies to get.
+
+        Returns:
+            list[dict]: the top trending movies with their trending score.
+        """
+
+        trending_movies = self.redis.zrevrange(
+            self._TRENDING_SCORE_MOVIES_KEY,
+            0,
+            limit - 1,
+            withscores=True,
+        )
+
+        movies = []
+        for normalized_title, score in trending_movies:
+            movie = self.get(normalized_title)
+            if movie:
+                movie["trending_score"] = int(score)
+                movies.append(movie)
+
+        return movies
+
+    def get_popularity_metrics(self) -> list[dict]:
+        """Gets the unique user interest count for each movie.
+
+        Returns:
+            list[dict]: movie data with the number of interested users sorted descending.
+        """
+
+        movies = []
+        for movie_key in self.redis.scan_iter("movie:*"):
+            if movie_key.endswith(":watchlist"):
+                continue
+
+            movie = self.redis.hgetall(movie_key)
+            if movie:
+                watchlist_key = self._get_watchlist_key(movie_key)
+                movie["interested_users"] = self.redis.scard(watchlist_key)
+                movies.append(movie)
+
+        return sorted(
+            movies,
+            key=lambda movie: movie["interested_users"],
+            reverse=True,
+        )
+
 
 if __name__ == "__main__":
     pass

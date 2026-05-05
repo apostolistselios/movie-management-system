@@ -28,8 +28,20 @@ class UserRepository:
         """
 
         history_key = self._get_history_key(username)
-        self.redis.rpush(history_key, title)
-        self.redis.ltrim(history_key, -5, -1)
+        self.redis.lpush(history_key, title)
+        self.redis.ltrim(history_key, 0, 4)
+
+    def get_history(self, username: str) -> list[str]:
+        """Gets the last movies searched by the given user, newest first.
+
+        Args:
+            username (str): the username of the logged in user.
+
+        Returns:
+            list[str]: the user's latest searched movie titles, newest first.
+        """
+
+        return self.redis.lrange(self._get_history_key(username), 0, -1)
 
 
 if __name__ == "__main__":

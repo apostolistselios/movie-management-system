@@ -91,6 +91,47 @@ def query_movie(
     user_repository.add_to_history(username, title)
 
 
+def print_statistics(
+    movie_repository: MovieRepository, user_repository: UserRepository, username: str
+) -> None:
+    """Displays platform and user statistics.
+
+    Args:
+        movie_repository (MovieRepository): the movie repository instance
+        user_repository (UserRepository): the user repository instance
+        username (str): the username of the logged in user
+    """
+
+    top_trending_movies = movie_repository.get_top_trending()
+    user_history = user_repository.get_history(username)
+    popularity_metrics = movie_repository.get_popularity_metrics()
+
+    print("\n--- Statistics ---")
+    print("\nTop 3 trending movies:")
+    if not top_trending_movies:
+        print("No trending movies yet.")
+    else:
+        for index, movie in enumerate(top_trending_movies, start=1):
+            print(
+                f"{index}. {movie['title']} "
+                f"(Trending Score: {movie['trending_score']})"
+            )
+
+    print("\nYour last 5 searched movies:")
+    if not user_history:
+        print("No search history yet.")
+    else:
+        for index, title in enumerate(user_history, start=1):
+            print(f"{index}. {title}")
+
+    print("\nPopularity metrics:")
+    if not popularity_metrics:
+        print("No movies found.")
+    else:
+        for movie in popularity_metrics:
+            print(f"{movie['title']}: {movie['interested_users']} interested users")
+
+
 def main() -> None:
     redis = create_redis_client()
     movie_repository = MovieRepository(redis)
@@ -110,8 +151,8 @@ def main() -> None:
             query_movie(movie_repository, user_repository, username)
 
         elif choice == "S":
-            # TODO: Υλοποίηση στατιστικών
-            pass
+            print_statistics(movie_repository, user_repository, username)
+
         elif choice == "X":
             print("Exiting...")
             break
