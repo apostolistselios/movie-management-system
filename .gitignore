@@ -1,2 +1,3 @@
 .venv
 redis_data
+__pycache__

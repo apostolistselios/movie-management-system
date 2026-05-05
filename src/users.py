@@ -1,0 +1,36 @@
+from redis import Redis
+
+
+class UserRepository:
+    """Handles user persistence in Redis."""
+
+    def __init__(self, redis: Redis) -> None:
+        self.redis = redis
+
+    def _get_history_key(self, username: str) -> str:
+        """Builds the Redis key for a users search history.
+
+        Args:
+            username (str): the username of the logged in user.
+
+        Returns:
+            str: the redis key of the search history.
+        """
+
+        return f"user:{username}:history"
+
+    def add_to_history(self, username: str, title: str) -> None:
+        """Adds the given movie title to the users search history and trims list to 5.
+
+        Args:
+            username (str): the username of the logged in user.
+            title (str): the given movie title
+        """
+
+        history_key = self._get_history_key(username)
+        self.redis.rpush(history_key, title)
+        self.redis.ltrim(history_key, -5, -1)
+
+
+if __name__ == "__main__":
+    pass
