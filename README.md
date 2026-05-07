@@ -58,7 +58,7 @@ Movie titles are normalized for keys, so `The Matrix` becomes `movie:the_matrix`
 ### 1. Start Redis Stack
 
 ```bash
-docker compose up -d
+$ docker compose up -d
 ```
 
 This starts:
@@ -69,20 +69,20 @@ This starts:
 ### 2. Create and activate a virtual environment
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+$ python3 -m venv .venv
+$ source .venv/bin/activate
 ```
 
 ### 3. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 ### 4. Run the application
 
 ```bash
-python src/app.py
+$ python src/app.py
 ```
 
 The app asks for a username and then opens the interactive menu:
@@ -165,14 +165,14 @@ Did you mean 'The Matrix' that already exists in the database? (Y/N): Y
 Stop Redis Stack:
 
 ```bash
-docker compose down
+$ docker compose down
 ```
 
 Stop Redis Stack and remove persisted Redis data:
 
 ```bash
-docker compose down
-rm -rf redis_data
+$ docker compose down
+$ rm -rf redis_data
 ```
 
 ## Notes
