@@ -88,7 +88,7 @@ python src/app.py
 The app asks for a username and then opens the interactive menu:
 
 ```text
---- Μένου Redis Movies ---
+--- Menu Redis Movies ---
 (I)nsert Movie | (Q)uery | (S)tatistics | e(X)it
 Option:
 ```
@@ -100,7 +100,7 @@ Option:
 ```text
 Enter your username: alice
 
---- Μένου Redis Movies ---
+--- Menu Redis Movies ---
 (I)nsert Movie | (Q)uery | (S)tatistics | e(X)it
 Option: I
 
@@ -116,7 +116,7 @@ The movie is stored in Redis and `alice` is added to its watchlist.
 ### Query a movie
 
 ```text
---- Μένου Redis Movies ---
+--- Menu Redis Movies ---
 (I)nsert Movie | (Q)uery | (S)tatistics | e(X)it
 Option: Q
 Please enter a movie title: Matrix
@@ -135,7 +135,7 @@ trending score, and stores the title in the user's recent search history.
 ### View statistics
 
 ```text
---- Μένου Redis Movies ---
+--- Menu Redis Movies ---
 (I)nsert Movie | (Q)uery | (S)tatistics | e(X)it
 Option: S
 

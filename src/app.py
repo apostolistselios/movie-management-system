@@ -142,7 +142,7 @@ def main() -> None:
     username = input("Enter your username: ")
 
     while True:
-        print("\n--- Μένου Redis Movies ---")
+        print("\n--- Menu Redis Movies ---")
         print("(I)nsert Movie | (Q)uery | (S)tatistics | e(X)it")
         choice = input("Option: ").upper()
 
