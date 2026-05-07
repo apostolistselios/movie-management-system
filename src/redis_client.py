@@ -79,8 +79,6 @@ class RedisClient:
         """
 
         return "".join(
-            character
-            if character.isalnum() or character == "_"
-            else f"\\{character}"
+            character if character.isalnum() or character == "_" else f"\\{character}"
             for character in term
         )

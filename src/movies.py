@@ -1,6 +1,7 @@
+from redis.commands.search.query import Query
+
 import utils
 from redis_client import RedisClient
-from redis.commands.search.query import Query
 
 
 class MovieRepository:
@@ -153,8 +154,7 @@ class MovieRepository:
         """
 
         fuzzy_terms = [
-            f"%{self.redis_client.escape_search_term(term)}%"
-            for term in title.split()
+            f"%{self.redis_client.escape_search_term(term)}%" for term in title.split()
         ]
 
         return f"@title:({' '.join(fuzzy_terms)})"
