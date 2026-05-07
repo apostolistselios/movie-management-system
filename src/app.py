@@ -19,7 +19,21 @@ def insert_movie(movie_repository: MovieRepository, username: str) -> None:
 
     print("\n--- Inserting a movie ---")
 
-    title = utils.get_non_empty("Enter the movie title: ")
+    while True:
+        title = utils.get_non_empty("Enter the movie title: ")
+        movie_match = movie_repository.search_by_title(title)
+        if not movie_match:
+            break
+
+        answer = input(
+            f"Did you mean '{movie_match['title']}' that already exists in the database? (Y/N): "
+        ).upper()
+
+        if answer == "Y":
+            movie_repository.add_to_watchlist(movie_match["title"], username)
+            print(f"--- Added '{movie_match['title']}' to your watchlist ---")
+            return
+
     director = utils.get_non_empty("Enter the movie director: ")
 
     try:
@@ -51,11 +65,21 @@ def query_movie(
         username (str): the username of the logged in user
     """
 
-    title = utils.get_non_empty("Please enter a movie title: ")
-    movie = movie_repository.get(title)
-    if not movie:
-        print(f"\n--- Movie: {title} was not found ---")
-        return
+    while True:
+        title = utils.get_non_empty("Please enter a movie title: ")
+        movie = movie_repository.search_by_title(title)
+        if not movie:
+            print(f"\n--- Movie: {title} was not found ---")
+            return
+
+        answer = input(
+            f"Did you mean '{movie['title']}' that already exists in the database? (Y/N): "
+        ).upper()
+
+        if answer == "Y":
+            break
+
+    title = movie["title"]
 
     no_users_watched = movie_repository.get_watch_count(title)
 

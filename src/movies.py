@@ -1,5 +1,6 @@
 import utils
 from redis_client import RedisClient
+from redis.commands.search.query import Query
 
 
 class MovieRepository:
@@ -11,6 +12,7 @@ class MovieRepository:
     _TRENDING_SCORE_MOVIES_KEY = "trending_score:movies"
 
     def __init__(self, redis_client: RedisClient) -> None:
+        self.redis_client = redis_client
         self.redis = redis_client.redis
 
     def _get_normalized_title(self, title: str) -> str:
@@ -116,6 +118,46 @@ class MovieRepository:
 
         movie_key = self._get_movie_key(title)
         return self.redis.hgetall(movie_key)
+
+    def search_by_title(self, title: str) -> dict:
+        """Searches the movie title index for the first matching movie.
+
+        Args:
+            title (str): the title entered by the user.
+
+        Returns:
+            dict: the first matching movie, or an empty dict if no match exists.
+        """
+
+        search_query = Query(self._get_title_search_query(title)).paging(0, 1)
+        result = self.redis.ft(self.redis_client.MOVIES_TITLE_INDEX).search(
+            search_query
+        )
+
+        if not result.docs:
+            return {}
+
+        return self.redis.hgetall(result.docs[0].id)
+
+    def _get_title_search_query(self, title: str) -> str:
+        """Builds a fuzzy RediSearch title-field query from user input.
+
+        Each title term is escaped and wrapped in "%" to enable fuzzy matching.
+        For example: "matrx" becomes "@title:(%matrx%)".
+
+        Args:
+            title (str): the title entered by the user.
+
+        Returns:
+            str: the fuzzy RediSearch query for the title field.
+        """
+
+        fuzzy_terms = [
+            f"%{self.redis_client.escape_search_term(term)}%"
+            for term in title.split()
+        ]
+
+        return f"@title:({' '.join(fuzzy_terms)})"
 
     def get_watch_count(self, title: str) -> int:
         """Gets the number of users that have the current movie in their watchlist.
