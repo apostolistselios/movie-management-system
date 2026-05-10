@@ -1,13 +1,13 @@
 # Movie Management System in Redis
 
-## 1. Introduction
+## Introduction
 
 The goal of this assignment is to implement an application in Python that will
 manage movie information and user interactions using Redis.
 Choosing the appropriate data structure is critical for the system’s efficiency,
 as the application requires handling complex relationships and real-time statistics.
 
-## 2. Required Data Structures
+## Required Data Structures
 
 For the full implementation of the application, it is mandatory to use the following four (4)
 Redis data structures: **Hashes, Sets, Sorted Sets, Lists**.
@@ -15,12 +15,12 @@ Redis data structures: **Hashes, Sets, Sorted Sets, Lists**.
 The correct mapping of each operation to the appropriate structure is part of the evaluation
 and must be justified in the technical report.
 
-## 3. Functional Requirements
+## Functional Requirements
 
 When the application starts, it asks the user for a username. It then provides the following
 menu of operations:
 
-### A. Movie Insertion
+### Movie Insertion
 
 The user enters the **Title**, **Director**, and **Release Year** of a movie.
 The system must check whether the movie (i.e., the title) already exists in the database.5
@@ -30,7 +30,7 @@ The system must check whether the movie (i.e., the title) already exists in the 
 - If the movie is new, its full details are stored, and the user who inserted it is added
   to the movie’s watchlist.
 
-### B. Search & Interaction (Query)
+### Search & Interaction (Query)
 
 The user searches for a movie by title. During the search, the following actions are
 automatically performed:
@@ -43,7 +43,7 @@ automatically performed:
 4. **History**: The movie title is added to the user’s personal history.
    The system must keep only the last 5 searches for each user.
 
-### C. Statistics & Ranking
+### Statistics & Ranking
 
 The system displays aggregated statistics:
 
@@ -53,7 +53,7 @@ The system displays aggregated statistics:
 3. **Popularity Metrics**: The number of unique users who have shown interest in each
    movie in the database.
 
-## 4. Smart Search & Fault Tolerance
+## Smart Search & Fault Tolerance
 
 Implement a **Smart Search (Fuzzy Search)** mechanism that makes the application resilient
 to typos and case differences (case insensitivity) when inserting or searching for a movie.
@@ -66,8 +66,8 @@ the system should detect the similarity and ask the user if they meant the exist
 1. **Case Insensitivity**: A simple but effective technique is converting all title keys
    to lowercase before storing or searching in Redis.
 
-2. **RediSearch (Redis Stack)**:
-   Using the RediSearch module allows the use of the `%` operator (e.g., `%Incepton%`),
+2. **Redis Search (Redis Stack)**:
+   Using the Redis Search module allows the use of the `%` operator (e.g., `%Incepton%`),
    which automatically computes the Levenshtein distance between strings.
    (You will need to create an index for searching by movie title—refer to Redis documentation.)
 

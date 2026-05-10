@@ -7,7 +7,7 @@ each movie, records recent user searches, and ranks movies by search popularity.
 ## Features
 
 - Add movies with title, director, and release year.
-- Search movies by title with fuzzy matching through RediSearch.
+- Search movies by title with fuzzy matching through Redis Search.
 - Automatically add the current user to a movie watchlist when they insert or search for a movie.
 - Track a trending score every time a movie is queried.
 - Keep each user's last 5 searched movies.
@@ -20,7 +20,7 @@ each movie, records recent user searches, and ranks movies by search popularity.
 
 - Python 3.10+
 - Redis Stack
-- RediSearch
+- Redis Search
 - Docker Compose
 
 ## Project Structure
@@ -177,6 +177,6 @@ $ rm -rf redis_data
 
 ## Notes
 
-- Redis Stack is required because the app uses RediSearch for fuzzy title matching.
+- Redis Stack is required because the app uses Redis Search for fuzzy title matching.
 - Redis data is persisted in the local `redis_data/` directory through Docker Compose.
 - If Redis is not running, the app exits with a connection error.

@@ -141,7 +141,7 @@ class MovieRepository:
         return self.redis.hgetall(result.docs[0].id)
 
     def _get_title_search_query(self, title: str) -> str:
-        """Builds a fuzzy RediSearch title-field query from user input.
+        """Builds a fuzzy Redis Search title-field query from user input.
 
         Each title term is escaped and wrapped in "%" to enable fuzzy matching.
         For example: "matrx" becomes "@title:(%matrx%)".
@@ -150,7 +150,7 @@ class MovieRepository:
             title (str): the title entered by the user.
 
         Returns:
-            str: the fuzzy RediSearch query for the title field.
+            str: the fuzzy Redis Search query for the title field.
         """
 
         fuzzy_terms = [
@@ -197,10 +197,11 @@ class MovieRepository:
             list[dict]: the top trending movies with their trending score.
         """
 
-        trending_movies = self.redis.zrevrange(
-            self._TRENDING_SCORE_MOVIES_KEY,
-            0,
-            limit - 1,
+        trending_movies = self.redis.zrange(
+            name=self._TRENDING_SCORE_MOVIES_KEY,
+            start=0,
+            end=limit - 1,
+            desc=True,
             withscores=True,
         )
 

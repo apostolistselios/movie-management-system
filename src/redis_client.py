@@ -45,7 +45,7 @@ class RedisClient:
             sys.exit(1)
 
     def create_movie_title_index(self) -> None:
-        """Creates a RediSearch index for movie titles stored in hashes."""
+        """Creates a Redis Search index for movie titles stored in hashes."""
 
         try:
             self.redis.ft(self.MOVIES_TITLE_INDEX).create_index(
@@ -60,9 +60,9 @@ class RedisClient:
                 raise
 
     def escape_search_term(self, term: str) -> str:
-        """Escapes RediSearch query syntax characters in a single term.
+        """Escapes Redis Search query syntax characters in a single term.
 
-        RediSearch uses some characters as part of its query syntax.
+        Redis Search uses some characters as part of its query syntax.
         For example, characters like ":" or "-" can change the meaning of a search
         query if they are not escaped.
 
